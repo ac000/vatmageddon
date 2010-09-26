@@ -1,0 +1,56 @@
+.TH VATMAGEDDON 1 "Septempber 26, 2010" 
+.SH NAME 
+vatmageddon - GUI tool to calculate VAT, Gross & Net values.
+
+.SH SYNOPSIS 
+.B vatmageddon
+
+.SH DESCRIPTION 
+VAT, Gross & Net calculator
+
+.SH USAGE
+Upon starting you are presented with window containing various text entries, 
+value selectors, drop down menus and buttons.
+
+You can enter a value into either the \fBGross\fR or \fBNet\fR input box's.
+You can also change the \fBVat Rate\fR, number of \fBdecimal places\fR to
+round to and also the \fBrounding function\fR that is used, see below for
+more details on this.
+
+.SH ROUNDING FUNCTION
+The \fBrounding functions\fR come from \fBlibround\fR and currently implements
+\fBten\fR rounding algorithms.
+.TP
+.B ceil
+ceil()
+.TP
+.B ceil0
+Like the ceil() function, but always rounds away from 0 
+.TP
+.B floor
+floor()
+.TP
+.B floor0
+Like the floor() function, but always rounds toward 0
+.TP
+.B round_half_up
+Round towards +infinity
+.TP
+.B round_half_up0
+Round away from 0
+.TP
+.B round_half_down
+Round towards -infinity
+.TP
+.B round_half_down0
+Round towards 0
+.TP
+.B round_half_even (aka bankers rounding)
+Rounds to the nearest even number
+
+.SH SOURCE
+Source available at http://github.com/ac000/libround under the GNU GPLv2
+
+.SH AUTHORS
+Andrew Clayton <andrew@andrew@digital-domain.net>
+

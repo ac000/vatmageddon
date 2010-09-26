@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=vatmageddon
+Comment=Calculate VAT, Gross & Net values
+Exec=vatmageddon
+TryExec=vatmagaeddon
+Icon=stock_script.png
+Terminal=false
+Type=Application
+Categories=Application;Utility;
