@@ -58,7 +58,7 @@ static void cb_about()
 	gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(about),
 						(const gchar **)&authors);
 	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about),
-					"http://github.com/ac000/libround");
+					"http://github.com/ac000/vatmageddon");
 
 	/* Connect the close_button to destroy the widget */
 	g_signal_connect(G_OBJECT(about), "response",
