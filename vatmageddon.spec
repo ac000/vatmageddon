@@ -1,6 +1,6 @@
 Name:		vatmageddon	
-Version:	001
-Release:	2%{?dist}
+Version:	002
+Release:	1%{?dist}
 Summary:	GUI for calculating VAT, Gross & Net values
 
 Group:		Applications/System
@@ -42,6 +42,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jan 27 2011 Andrew Clayton <andrew@digital-domain.net> - 002-1
+- Update to latest version
+
 * Sat Oct 02 2010 Andrew Clayton <andrew@digital-domain.net> - 001-2
 - Some minor spelling and url updates
 

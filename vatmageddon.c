@@ -21,7 +21,7 @@
 #include "vatmageddon.h"
 
 /* Update for application version. */
-#define VERSION		"001"
+#define VERSION		"002"
 
 /* Set the default VAT rate */
 #define DEF_VAT_RATE	20.0
