@@ -23,6 +23,9 @@
 /* Update for application version. */
 #define VERSION		"001"
 
+/* Set the default VAT rate */
+#define DEF_VAT_RATE	20.0
+
 GtkWidget *gross_entry;
 GtkWidget *net_entry;
 GtkWidget *vat_entry;
@@ -284,7 +287,8 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(vr_hbox), vat_rate_label);
 	
 	vat_rate_entry = gtk_spin_button_new_with_range(0.0, 100.00, 0.1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(vat_rate_entry), 17.5);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(vat_rate_entry),
+								DEF_VAT_RATE);
 	gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(vat_rate_entry), TRUE);
 	gtk_widget_show(vat_rate_entry);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), vat_rate_entry);
