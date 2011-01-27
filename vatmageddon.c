@@ -247,6 +247,8 @@ int main(int argc, char *argv[])
 	gross_entry = gtk_entry_new();
 	gtk_widget_show(gross_entry);
 	gtk_container_add(GTK_CONTAINER(gross_hbox), gross_entry);
+	g_signal_connect(G_OBJECT(gross_entry), "activate",
+						G_CALLBACK(cb_calculate), NULL);
 
 	/* Net Container */
 	net_hbox = gtk_hbox_new(FALSE, 0);
@@ -260,6 +262,8 @@ int main(int argc, char *argv[])
 	net_entry = gtk_entry_new();
 	gtk_widget_show(net_entry);
 	gtk_container_add(GTK_CONTAINER(net_hbox), net_entry);
+	g_signal_connect(G_OBJECT(net_entry), "activate",
+						G_CALLBACK(cb_calculate), NULL);
 
 	/* VAT Container */
 	vat_hbox = gtk_hbox_new(FALSE, 0);
