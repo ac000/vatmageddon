@@ -1,9 +1,9 @@
 /*
  * vatmageddon
  *
- * A Gross/Net/VAT calulator
+ * A Gross/Net/VAT calculator
  *
- * Copyright (C) 2010, Andrew Clayton <andrew@digital-domain.net>
+ * Copyright (C) 2010-2011, Andrew Clayton <andrew@digital-domain.net>
  *
  * Released under the General Public License (GPL) version 2.
  * See COPYING
@@ -54,7 +54,7 @@ static void cb_about()
 								"vatmageddon");
 	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(about), VERSION);
 	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(about),
-					"Copyright (C) 2010 Andrew Clayton");
+				"Copyright (C) 2010-2011 Andrew Clayton");
 	gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(about),
 						(const gchar **)&authors);
 	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about),
