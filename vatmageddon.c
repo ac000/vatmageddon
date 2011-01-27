@@ -34,9 +34,6 @@ GtkWidget *dp_entry;
 
 GtkWidget *rounding_combo;
 
-int gross_entered = 0;
-int net_entered = 0;
-
 
 static void cb_quit()
 {
@@ -78,39 +75,16 @@ static void cb_clear_all()
 
 	gtk_entry_set_editable(GTK_ENTRY(gross_entry), TRUE);
 	gtk_entry_set_editable(GTK_ENTRY(net_entry), TRUE);
-
-	gross_entered = 0;
-	net_entered = 0;
 }
 
-static void cb_calculate()
+static void cb_calculate(GtkWidget *widget, gpointer data)
 {
-	double gross;
-	
-	gross = strtod(gtk_entry_get_text(GTK_ENTRY(gross_entry)), NULL);
+	if (strcmp(data, "net") == 0)
+		calculate_gross();
+	else if (strcmp(data, "gross") == 0)
+		calculate_net();
 
-	if (gross_entered)
-		goto out_gross;
-	else if (net_entered)
-		goto out_net;
-
-	if (gross > 0.0)
-		goto out_gross;
-	else
-		goto out_net;
-
-out_gross:
-	calculate_net();
 	calculate_vat();
-	gross_entered = 1;
-	goto out;
-out_net:
-	calculate_gross();
-	calculate_vat();
-	net_entered = 1;
-out:
-	gtk_entry_set_editable(GTK_ENTRY(gross_entry), FALSE);
-	gtk_entry_set_editable(GTK_ENTRY(net_entry), FALSE);
 }
 
 static double do_rounding(double to_round)
@@ -169,7 +143,7 @@ static void calculate_net()
         double vat_rate;
         double rounded;
         char net_e[128];
-	
+
 	gross = strtod(gtk_entry_get_text(GTK_ENTRY(gross_entry)), NULL);
 	vat_rate = gtk_spin_button_get_value(GTK_SPIN_BUTTON(vat_rate_entry));
 
@@ -248,7 +222,7 @@ int main(int argc, char *argv[])
 	gtk_widget_show(gross_entry);
 	gtk_container_add(GTK_CONTAINER(gross_hbox), gross_entry);
 	g_signal_connect(G_OBJECT(gross_entry), "activate",
-						G_CALLBACK(cb_calculate), NULL);
+					G_CALLBACK(cb_calculate), "gross");
 
 	/* Net Container */
 	net_hbox = gtk_hbox_new(FALSE, 0);
@@ -263,7 +237,7 @@ int main(int argc, char *argv[])
 	gtk_widget_show(net_entry);
 	gtk_container_add(GTK_CONTAINER(net_hbox), net_entry);
 	g_signal_connect(G_OBJECT(net_entry), "activate",
-						G_CALLBACK(cb_calculate), NULL);
+					G_CALLBACK(cb_calculate), "net");
 
 	/* VAT Container */
 	vat_hbox = gtk_hbox_new(FALSE, 0);
