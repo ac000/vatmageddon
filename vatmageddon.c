@@ -100,25 +100,25 @@ static double do_rounding(double to_round)
 	double rf = get_rounding_factor(dp);
 	double ret = 0.0;
 
-	if ((strcmp(rounder, "ceil")) == 0)
+	if (strstr(rounder, "ceil -"))
 		ret = ceil(to_round * rf) / rf;
-	else if ((strcmp(rounder, "ceil0")) == 0)
+	else if (strstr(rounder, "ceil0 -"))
 		ret = ceil0(to_round, rf);
-	else if ((strcmp(rounder, "floor")) == 0)
+	else if (strstr(rounder, "floor -"))
 		ret = floor(to_round * rf) / rf;
-	else if ((strcmp(rounder, "floor0")) == 0)
+	else if (strstr(rounder, "floor0 -"))
 		ret = floor0(to_round, rf);
-	else if ((strcmp(rounder, "round")) == 0)
+	else if (strstr(rounder, "round -"))
 		ret = round(to_round * rf) / rf;
-	else if ((strcmp(rounder, "round_half_up")) == 0)
+	else if (strstr(rounder, "round_half_up -"))
 		ret = round_half_up(to_round, rf);
-	else if ((strcmp(rounder, "round_half_up0")) == 0)
+	else if (strstr(rounder, "round_half_up0 -"))
 		ret = round_half_up0(to_round, rf);
-	else if ((strcmp(rounder, "round_half_down")) == 0)
+	else if (strstr(rounder, "round_half_down -"))
 		ret = round_half_down(to_round, rf);
-	else if ((strcmp(rounder, "round_half_down0")) == 0)
+	else if (strstr(rounder, "round_half_down0 -"))
 		ret = round_half_down0(to_round, rf);
-	else if ((strcmp(rounder, "round_half_even")) == 0)
+	else if (strstr(rounder, "round_half_even -"))
 		ret = round_half_even(to_round, rf);
 
 	return ret;
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
 						G_CALLBACK(cb_quit), NULL);
 	gtk_window_set_title(GTK_WINDOW(window), "vatmageddon");
 	gtk_container_set_border_width(GTK_CONTAINER(window), 0);
-	gtk_widget_set_size_request(window, 500, 220);
+	gtk_widget_set_size_request(window, 670, 220);
 
 	/* Main widget container */
 	vbox = gtk_vbox_new(FALSE, 0);
@@ -292,21 +292,26 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(vr_hbox), rounding_label);
 
 	rounding_combo = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo), "ceil");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo), "ceil0");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo), "floor");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo), "floor0");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo), "round");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
-							"round_half_up");
+							"ceil - ceil()");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
-							"round_half_up0");
+						"ceil0 - round away from 0");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
-							"round_half_down");
+							"floor - floor()");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
-							"round_half_down0");
+						"floor0 - round toward 0");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
-							"round_half_even");
+							"round - round()");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+				"round_half_up - round towards +infinity ");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+					"round_half_up0 - round away from 0");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+				"round_half_down - round towards -infinity");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+					"round_half_down0 - round towards 0");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+				"round_half_even - aka bankers rounding");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(rounding_combo), DEF_RND_FUNC);
 	gtk_widget_show(rounding_combo);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), rounding_combo);
