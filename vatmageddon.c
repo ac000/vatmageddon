@@ -23,15 +23,15 @@
 /* Update for application version. */
 #define VERSION		"002"
 
-/* Set the default VAT rate */
-#define DEF_VAT_RATE	20.0
+#define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
+#define DEF_DP		2	/* Set the default number of decimal places */
+#define DEF_RND_FUNC	4	/* Set the default rounding function */
 
 GtkWidget *gross_entry;
 GtkWidget *net_entry;
 GtkWidget *vat_entry;
 GtkWidget *vat_rate_entry;
 GtkWidget *dp_entry;
-
 GtkWidget *rounding_combo;
 
 
@@ -67,11 +67,19 @@ static void cb_about()
 	gtk_widget_show(about);
 }
 
-static void cb_clear_all()
+static void cb_reset(GtkWidget *widget, gpointer data)
 {
 	gtk_entry_set_text(GTK_ENTRY(gross_entry), "");
 	gtk_entry_set_text(GTK_ENTRY(net_entry), "");
 	gtk_entry_set_text(GTK_ENTRY(vat_entry), "");
+
+	if (strcmp(data, "reset") == 0) {
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(vat_rate_entry),
+								DEF_VAT_RATE);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dp_entry), DEF_DP);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(rounding_combo),
+								DEF_RND_FUNC);
+	}
 }
 
 static void cb_calculate(GtkWidget *widget, gpointer data)
@@ -186,7 +194,8 @@ int main(int argc, char *argv[])
 	GtkWidget *rounding_label;
 	
 	GtkWidget *calculate_button;
-	GtkWidget *new_button;
+	GtkWidget *reset_button;
+	GtkWidget *clear_button;
 	GtkWidget *quit_button;
 	GtkWidget *about_button;
 
@@ -273,7 +282,7 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(vr_hbox), dp_label);
 
 	dp_entry = gtk_spin_button_new_with_range(0, 10, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(dp_entry), 2);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(dp_entry), DEF_DP);
 	gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(dp_entry), TRUE);
 	gtk_widget_show(dp_entry);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), dp_entry);
@@ -298,7 +307,7 @@ int main(int argc, char *argv[])
 							"round_half_down0");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
 							"round_half_even");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(rounding_combo), 4);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(rounding_combo), DEF_RND_FUNC);
 	gtk_widget_show(rounding_combo);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), rounding_combo);
 
@@ -313,12 +322,18 @@ int main(int argc, char *argv[])
 	gtk_widget_show(calculate_button);
 	gtk_container_add(GTK_CONTAINER(ccq_hbox), calculate_button);
 
-	new_button = gtk_button_new_with_label("New");
-	g_signal_connect(G_OBJECT(new_button), "clicked",
-						G_CALLBACK(cb_clear_all), NULL);
-	gtk_widget_show(new_button);
-	gtk_container_add(GTK_CONTAINER(ccq_hbox), new_button);
+	reset_button = gtk_button_new_with_label("Reset");
+	g_signal_connect(G_OBJECT(reset_button), "clicked",
+						G_CALLBACK(cb_reset), "reset");
+	gtk_widget_show(reset_button);
+	gtk_container_add(GTK_CONTAINER(ccq_hbox), reset_button);
 	
+	clear_button = gtk_button_new_with_label("Clear");
+	g_signal_connect(G_OBJECT(clear_button), "clicked",
+						G_CALLBACK(cb_reset), "clear");
+	gtk_widget_show(clear_button);
+	gtk_container_add(GTK_CONTAINER(ccq_hbox), clear_button);
+
 	about_button = gtk_button_new_with_label("About");
 	g_signal_connect(G_OBJECT(about_button), "clicked",
 						G_CALLBACK(cb_about), NULL);
