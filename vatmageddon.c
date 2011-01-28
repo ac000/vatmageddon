@@ -72,9 +72,6 @@ static void cb_clear_all()
 	gtk_entry_set_text(GTK_ENTRY(gross_entry), "");
 	gtk_entry_set_text(GTK_ENTRY(net_entry), "");
 	gtk_entry_set_text(GTK_ENTRY(vat_entry), "");
-
-	gtk_entry_set_editable(GTK_ENTRY(gross_entry), TRUE);
-	gtk_entry_set_editable(GTK_ENTRY(net_entry), TRUE);
 }
 
 static void cb_calculate(GtkWidget *widget, gpointer data)
