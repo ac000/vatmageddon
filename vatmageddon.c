@@ -21,7 +21,7 @@
 #include "vatmageddon.h"
 
 /* Update for application version. */
-#define VERSION		"003"
+#define VERSION		"003.90"
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
@@ -193,7 +193,6 @@ int main(int argc, char *argv[])
 	GtkWidget *dp_label;
 	GtkWidget *rounding_label;
 	
-	GtkWidget *calculate_button;
 	GtkWidget *reset_button;
 	GtkWidget *clear_button;
 	GtkWidget *quit_button;
@@ -316,16 +315,10 @@ int main(int argc, char *argv[])
 	gtk_widget_show(rounding_combo);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), rounding_combo);
 
-	/* Calculate, Clear, Quit */
+	/* Reset, Clear, About, Quit */
 	ccq_hbox = gtk_hbox_new(FALSE, 0);
 	gtk_widget_show(ccq_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), ccq_hbox);
-
-	calculate_button = gtk_button_new_with_label("Calculate");
-	g_signal_connect(G_OBJECT(calculate_button), "clicked",
-						G_CALLBACK(cb_calculate), NULL);
-	gtk_widget_show(calculate_button);
-	gtk_container_add(GTK_CONTAINER(ccq_hbox), calculate_button);
 
 	reset_button = gtk_button_new_with_label("Reset");
 	g_signal_connect(G_OBJECT(reset_button), "clicked",
