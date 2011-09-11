@@ -18,10 +18,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "vatmageddon.h"
-
 /* Update for application version. */
-#define VERSION		"004"
+#define VERSION		"004.90"
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
@@ -80,16 +78,6 @@ static void cb_reset(GtkWidget *widget, gpointer data)
 		gtk_combo_box_set_active(GTK_COMBO_BOX(rounding_combo),
 								DEF_RND_FUNC);
 	}
-}
-
-static void cb_calculate(GtkWidget *widget, gpointer data)
-{
-	if (strcmp(data, "net") == 0)
-		calculate_gross();
-	else if (strcmp(data, "gross") == 0)
-		calculate_net();
-
-	calculate_vat();
 }
 
 static double do_rounding(double to_round)
@@ -173,6 +161,16 @@ static void calculate_vat()
 	rounded = do_rounding(vat);
 	sprintf(vat_e, "%f", rounded);
 	gtk_entry_set_text(GTK_ENTRY(vat_entry), vat_e);
+}
+
+static void cb_calculate(GtkWidget *widget, gpointer data)
+{
+	if (strcmp(data, "net") == 0)
+		calculate_gross();
+	else if (strcmp(data, "gross") == 0)
+		calculate_net();
+
+	calculate_vat();
 }
 
 int main(int argc, char *argv[])
