@@ -33,12 +33,12 @@ GtkWidget *dp_entry;
 GtkWidget *rounding_combo;
 
 
-static void cb_quit()
+static void cb_quit(void)
 {
 	gtk_main_quit();
 }
 
-static void cb_about()
+static void cb_about(void)
 {
 	GtkWidget *about;
 	const gchar *authors[2] = {
@@ -112,7 +112,7 @@ static double do_rounding(double to_round)
 	return ret;
 }
 
-static void calculate_gross()
+static void calculate_gross(void)
 {
 	double gross;
 	double net;
@@ -129,7 +129,7 @@ static void calculate_gross()
 	gtk_entry_set_text(GTK_ENTRY(gross_entry), gross_e);
 }
 
-static void calculate_net()
+static void calculate_net(void)
 {
 	double gross;
         double net;
@@ -146,7 +146,7 @@ static void calculate_net()
 	gtk_entry_set_text(GTK_ENTRY(net_entry), net_e);
 }
 
-static void calculate_vat()
+static void calculate_vat(void)
 {
 	double gross;
 	double vat;
