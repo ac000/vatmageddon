@@ -13,13 +13,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
 #include <libround.h>
 
 #include <glib.h>
 #include <gtk/gtk.h>
 
 /* Update for application version. */
-#define VERSION		"004.90"
+#define VERSION		"005"
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
@@ -52,7 +53,7 @@ static void cb_about(void)
 								"vatmageddon");
 	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(about), VERSION);
 	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(about),
-				"Copyright (C) 2010-2011 Andrew Clayton");
+				"Copyright (C) 2010-2012 Andrew Clayton");
 	gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(about),
 						(const gchar **)&authors);
 	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about),
@@ -85,29 +86,29 @@ static double do_rounding(double to_round)
 	int dp = gtk_spin_button_get_value(GTK_SPIN_BUTTON(dp_entry));
 	char *rounder = gtk_combo_box_get_active_text(GTK_COMBO_BOX(
 							rounding_combo));
-	double rf = get_rounding_factor(dp);
+	double rf = lr_get_rounding_factor(dp);
 	double ret = 0.0;
 
 	if (strstr(rounder, "ceil -"))
 		ret = ceil(to_round * rf) / rf;
 	else if (strstr(rounder, "ceil0 -"))
-		ret = ceil0(to_round, rf);
+		ret = lr_ceil0(to_round, rf);
 	else if (strstr(rounder, "floor -"))
 		ret = floor(to_round * rf) / rf;
 	else if (strstr(rounder, "floor0 -"))
-		ret = floor0(to_round, rf);
+		ret = lr_floor0(to_round, rf);
 	else if (strstr(rounder, "round -"))
 		ret = round(to_round * rf) / rf;
 	else if (strstr(rounder, "round_half_up -"))
-		ret = round_half_up(to_round, rf);
+		ret = lr_round_half_up(to_round, rf);
 	else if (strstr(rounder, "round_half_up0 -"))
-		ret = round_half_up0(to_round, rf);
+		ret = lr_round_half_up0(to_round, rf);
 	else if (strstr(rounder, "round_half_down -"))
-		ret = round_half_down(to_round, rf);
+		ret = lr_round_half_down(to_round, rf);
 	else if (strstr(rounder, "round_half_down0 -"))
-		ret = round_half_down0(to_round, rf);
+		ret = lr_round_half_down0(to_round, rf);
 	else if (strstr(rounder, "round_half_even -"))
-		ret = round_half_even(to_round, rf);
+		ret = lr_round_half_even(to_round, rf);
 
 	return ret;
 }

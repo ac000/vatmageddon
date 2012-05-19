@@ -1,5 +1,5 @@
 Name:		vatmageddon	
-Version:	004
+Version:	005
 Release:	1%{?dist}
 Summary:	GUI for calculating VAT, Gross & Net values
 
@@ -9,8 +9,8 @@ URL:		http://github.com/ac000/vatmageddon
 Source0:	vatmageddon-%{version}.tar
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-BuildRequires:	gtk2-devel glib2-devel libround
-Requires:	libround
+BuildRequires:	gtk2-devel, glib2-devel, libround >= 1.0.0
+Requires:	libround >= 1.0.0
 
 %description
 vatmageddon is a GUI for calculating VAT, Gross & Net values.
@@ -42,6 +42,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat May 19 2012 Andrew Clayton <andrew@digital-domain.net> - 005-1
+- Update for new version of libround
+
 * Thu Mar 31 2011 Andrew Clayton <andrew@digital-domain.net> - 004-1
 - Update to latest version
 
