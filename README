@@ -1,0 +1,4 @@
+A simple GUI for working out Gross, Net and VAT. With a variety of
+rounding algorithms to choose from using libround
+https://github.com/ac000/libround
+
