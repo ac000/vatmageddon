@@ -24,7 +24,19 @@
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
-#define DEF_RND_FUNC	4	/* Set the default rounding function */
+
+#define RND_CEIL		0
+#define RND_CEIL0		1
+#define RND_FLOOR		2
+#define RND_FLOOR0		3
+#define RND_ROUND		4
+#define RND_ROUND_HALF_UP	5
+#define RND_ROUND_HALF_UP0	6
+#define RND_ROUND_HALF_DOWN	7
+#define RND_ROUND_HALF_DOWN0	8
+#define RND_ROUND_HALF_EVEN	9
+
+#define DEF_RND_FUNC	RND_ROUND	/* Set the default rounding function */
 
 GtkWidget *gross_entry;
 GtkWidget *net_entry;
