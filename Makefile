@@ -8,4 +8,4 @@ vatmageddon: vatmageddon.c
 	gzip -c vatmageddon.1 > vatmageddon.1.gz
 
 clean:
-	rm vatmageddon vatmageddon.1.gz
+	rm -f vatmageddon vatmageddon.1.gz
