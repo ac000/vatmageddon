@@ -20,7 +20,7 @@
 #include <gtk/gtk.h>
 
 /* Update for application version. */
-#define VERSION		"005"
+#define VERSION		"005.90"
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
@@ -358,5 +358,5 @@ int main(int argc, char *argv[])
 	gtk_widget_show(window);
 	gtk_main();
 
-	exit(0);
+	exit(EXIT_SUCCESS);
 }	
