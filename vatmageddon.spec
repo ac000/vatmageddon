@@ -1,5 +1,5 @@
 Name:		vatmageddon	
-Version:	005
+Version:	006
 Release:	1%{?dist}
 Summary:	GUI for calculating VAT, Gross & Net values
 
@@ -42,6 +42,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Dec 15 2012 Andrew Clayton <andrew@digital-domain.net> - 006-1
+- Update to new version.
+
+  Minor label changes
+
 * Sat May 19 2012 Andrew Clayton <andrew@digital-domain.net> - 005-1
 - Update for new version of libround
 
