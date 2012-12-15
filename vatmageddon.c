@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 	gtk_widget_show(gross_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), gross_hbox);
 
-	gross_label = gtk_label_new("Gross: ");
+	gross_label = gtk_label_new("Gross (incl. vat)");
 	gtk_widget_show(gross_label);
 	gtk_container_add(GTK_CONTAINER(gross_hbox), gross_label);
 
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
 	gtk_widget_show(net_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), net_hbox);
 
-	net_label = gtk_label_new("Net: ");
+	net_label = gtk_label_new("Net (excl. vat)");
 	gtk_widget_show(net_label);
 	gtk_container_add(GTK_CONTAINER(net_hbox), net_label);
 
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
 	gtk_widget_show(vat_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), vat_hbox);
 
-	vat_label = gtk_label_new("VAT: ");
+	vat_label = gtk_label_new("VAT");
 	gtk_widget_show(vat_label);
 	gtk_container_add(GTK_CONTAINER(vat_hbox), vat_label);
 
