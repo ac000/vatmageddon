@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
 	gtk_widget_show(dp_label);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), dp_label);
 
-	dp_entry = gtk_spin_button_new_with_range(0, 10, 1);
+	dp_entry = gtk_spin_button_new_with_range(0, 6, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(dp_entry), DEF_DP);
 	gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(dp_entry), TRUE);
 	gtk_widget_show(dp_entry);
