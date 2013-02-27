@@ -20,7 +20,7 @@
 #include <gtk/gtk.h>
 
 /* Update for application version. */
-#define VERSION		"006.90"
+#define VERSION		"006.95"
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
@@ -40,7 +40,7 @@
 
 GtkWidget *gross_entry;
 GtkWidget *net_entry;
-GtkWidget *vat_entry;
+GtkWidget *vat_view;
 GtkWidget *vat_rate_entry;
 GtkWidget *dp_entry;
 GtkWidget *rounding_combo;
@@ -79,9 +79,12 @@ static void cb_about(void)
 
 static void cb_reset(GtkWidget *widget, gpointer data)
 {
+	GtkTextBuffer *vat_buf = gtk_text_buffer_new(NULL);
+
 	gtk_entry_set_text(GTK_ENTRY(gross_entry), "");
 	gtk_entry_set_text(GTK_ENTRY(net_entry), "");
-	gtk_entry_set_text(GTK_ENTRY(vat_entry), "");
+	gtk_text_buffer_set_text(vat_buf, "", -1);
+	gtk_text_view_set_buffer(GTK_TEXT_VIEW(vat_view), vat_buf);
 
 	if (strcmp(data, "reset") == 0) {
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(vat_rate_entry),
@@ -95,7 +98,7 @@ static void cb_reset(GtkWidget *widget, gpointer data)
 static double do_rounding(double to_round)
 {
 	int dp = gtk_spin_button_get_value(GTK_SPIN_BUTTON(dp_entry));
-	char *rounder = gtk_combo_box_get_active_text(GTK_COMBO_BOX(
+	char *rounder = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(
 				rounding_combo));
 	double rf = lr_get_rounding_factor(dp);
 	double ret = 0.0;
@@ -165,6 +168,7 @@ static void calculate_vat(void)
 	double vat_rate;
 	double rounded;
 	char vat_e[128];
+	GtkTextBuffer *vat_buf = gtk_text_buffer_new(NULL);
 
 	gross = strtod(gtk_entry_get_text(GTK_ENTRY(gross_entry)), NULL);
 	vat_rate = gtk_spin_button_get_value(GTK_SPIN_BUTTON(vat_rate_entry));
@@ -172,7 +176,8 @@ static void calculate_vat(void)
 	vat = gross - (gross / (vat_rate / 100 + 1));	
 	rounded = do_rounding(vat);
 	sprintf(vat_e, "%f", rounded);
-	gtk_entry_set_text(GTK_ENTRY(vat_entry), vat_e);
+	gtk_text_buffer_set_text(vat_buf, vat_e, -1);
+	gtk_text_view_set_buffer(GTK_TEXT_VIEW(vat_view), vat_buf);
 }
 
 static void cb_calculate(GtkWidget *widget, gpointer data)
@@ -208,7 +213,7 @@ int main(int argc, char *argv[])
 	GtkWidget *quit_button;
 	GtkWidget *about_button;
 
-	GdkColor colour;
+	GdkRGBA rgba;
 
 	gtk_init(&argc, &argv);
 	
@@ -216,20 +221,22 @@ int main(int argc, char *argv[])
 	g_signal_connect(G_OBJECT(window), "destroy",
 			G_CALLBACK(cb_quit), NULL);
 	gtk_window_set_title(GTK_WINDOW(window), "vatmageddon");
+	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 0);
-	gtk_widget_set_size_request(window, 670, 220);
 
 	/* Main widget container */
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+	gtk_box_set_homogeneous(GTK_BOX(vbox), TRUE);
 	gtk_widget_show(vbox);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
 
 	/* Gross Container */
-	gross_hbox = gtk_hbox_new(FALSE, 0);
+	gross_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_show(gross_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), gross_hbox);
 
 	gross_label = gtk_label_new("Gross (incl. vat)");
+	gtk_label_set_width_chars(GTK_LABEL(gross_label), 20);
 	gtk_widget_show(gross_label);
 	gtk_container_add(GTK_CONTAINER(gross_hbox), gross_label);
 
@@ -240,11 +247,12 @@ int main(int argc, char *argv[])
 			G_CALLBACK(cb_calculate), "gross");
 
 	/* Net Container */
-	net_hbox = gtk_hbox_new(FALSE, 0);
+	net_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_show(net_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), net_hbox);
 
 	net_label = gtk_label_new("Net (excl. vat)");
+	gtk_label_set_width_chars(GTK_LABEL(net_label), 20);
 	gtk_widget_show(net_label);
 	gtk_container_add(GTK_CONTAINER(net_hbox), net_label);
 
@@ -255,27 +263,31 @@ int main(int argc, char *argv[])
 			G_CALLBACK(cb_calculate), "net");
 
 	/* VAT Container */
-	vat_hbox = gtk_hbox_new(FALSE, 0);
+	vat_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_show(vat_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), vat_hbox);
 
 	vat_label = gtk_label_new("VAT");
+	gtk_label_set_width_chars(GTK_LABEL(vat_label), 20);
 	gtk_widget_show(vat_label);
 	gtk_container_add(GTK_CONTAINER(vat_hbox), vat_label);
 
-	vat_entry = gtk_entry_new();
-	gtk_entry_set_editable(GTK_ENTRY(vat_entry), FALSE);
-	gdk_color_parse("grey", &colour);
-	gtk_widget_modify_base(vat_entry, GTK_STATE_NORMAL, &colour);
-	gtk_widget_show(vat_entry);
-	gtk_container_add(GTK_CONTAINER(vat_hbox), vat_entry);
+	vat_view = gtk_text_view_new();
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(vat_view), FALSE);
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(vat_view), FALSE);
+	g_object_set(vat_view, "width_request", 155, NULL);
+	gdk_rgba_parse(&rgba, "#ebf5ff");
+	gtk_widget_override_background_color(vat_view, GTK_STATE_FLAG_NORMAL,
+			&rgba);
+	gtk_widget_show(vat_view);
+	gtk_container_add(GTK_CONTAINER(vat_hbox), vat_view);
 
 	/* VAT Rate and Rounding method container */
-	vr_hbox = gtk_hbox_new(FALSE, 0);
+	vr_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4);
 	gtk_widget_show(vr_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), vr_hbox);
 	
-	vat_rate_label = gtk_label_new("VAT Rate: ");
+	vat_rate_label = gtk_label_new(" VAT Rate: ");
 	gtk_widget_show(vat_rate_label);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), vat_rate_label);
 	
@@ -300,55 +312,59 @@ int main(int argc, char *argv[])
 	gtk_widget_show(rounding_label);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), rounding_label);
 
-	rounding_combo = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	rounding_combo = gtk_combo_box_text_new();
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"ceil - ceil()");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"ceil0 - round away from 0");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"floor - floor()");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"floor0 - round toward 0");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"round - round()");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"round_half_up - round towards +infinity ");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"round_half_up0 - round away from 0");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"round_half_down - round towards -infinity");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"round_half_down0 - round towards 0");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(rounding_combo),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rounding_combo),
 			"round_half_even - aka bankers rounding");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(rounding_combo), DEF_RND_FUNC);
 	gtk_widget_show(rounding_combo);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), rounding_combo);
 
 	/* Reset, Clear, About, Quit */
-	ccq_hbox = gtk_hbox_new(FALSE, 0);
+	ccq_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_show(ccq_hbox);
 	gtk_container_add(GTK_CONTAINER(vbox), ccq_hbox);
 
 	reset_button = gtk_button_new_with_label("Reset");
+	g_object_set(reset_button, "expand", TRUE, NULL);
 	g_signal_connect(G_OBJECT(reset_button), "clicked",
 			G_CALLBACK(cb_reset), "reset");
 	gtk_widget_show(reset_button);
 	gtk_container_add(GTK_CONTAINER(ccq_hbox), reset_button);
 
 	clear_button = gtk_button_new_with_label("Clear");
+	g_object_set(clear_button, "expand", TRUE, NULL);
 	g_signal_connect(G_OBJECT(clear_button), "clicked",
 			G_CALLBACK(cb_reset), "clear");
 	gtk_widget_show(clear_button);
 	gtk_container_add(GTK_CONTAINER(ccq_hbox), clear_button);
 
 	about_button = gtk_button_new_with_label("About");
+	g_object_set(about_button, "expand", TRUE, NULL);
 	g_signal_connect(G_OBJECT(about_button), "clicked",
 			G_CALLBACK(cb_about), NULL);
 	gtk_widget_show(about_button);
 	gtk_container_add(GTK_CONTAINER(ccq_hbox), about_button);
 
 	quit_button = gtk_button_new_with_label("Quit");
+	g_object_set(quit_button, "expand", TRUE, NULL);
 	g_signal_connect(G_OBJECT(quit_button), "clicked",
 			G_CALLBACK(cb_quit), NULL);
 	gtk_widget_show(quit_button);
