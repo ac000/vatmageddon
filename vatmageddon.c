@@ -20,7 +20,7 @@
 #include <gtk/gtk.h>
 
 /* Update for application version. */
-#define VERSION		"006.95"
+#define VERSION		"007"
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
