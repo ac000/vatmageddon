@@ -45,6 +45,8 @@ GtkWidget *vat_rate_entry;
 GtkWidget *dp_entry;
 GtkWidget *rounding_combo;
 
+char val_fmt[5];
+
 static void cb_quit(void)
 {
 	gtk_main_quit();
@@ -124,6 +126,11 @@ static double do_rounding(double to_round)
 	else if (strstr(rounder, "round_half_even -"))
 		ret = lr_round_half_even(to_round, rf);
 
+	/* Create the format string for displaying the gross and net values */
+	snprintf(val_fmt, sizeof(val_fmt), "%%.%df",
+			gtk_spin_button_get_value_as_int(
+				GTK_SPIN_BUTTON(dp_entry)));
+
 	return ret;
 }
 
@@ -140,7 +147,7 @@ static void calculate_gross(void)
 
 	gross =	net * (vat_rate / 100 + 1);
 	rounded = do_rounding(gross);
-	sprintf(gross_e, "%f", rounded);
+	sprintf(gross_e, val_fmt, rounded);
 	gtk_entry_set_text(GTK_ENTRY(gross_entry), gross_e);
 }
 
@@ -157,7 +164,7 @@ static void calculate_net(void)
 
 	net = gross / (vat_rate / 100 + 1);
 	rounded = do_rounding(net);
-	sprintf(net_e, "%f", rounded);
+	sprintf(net_e, val_fmt, rounded);
 	gtk_entry_set_text(GTK_ENTRY(net_entry), net_e);
 }
 
@@ -175,7 +182,7 @@ static void calculate_vat(void)
 
 	vat = gross - (gross / (vat_rate / 100 + 1));	
 	rounded = do_rounding(vat);
-	sprintf(vat_e, "%f", rounded);
+	sprintf(vat_e, val_fmt, rounded);
 	gtk_text_buffer_set_text(vat_buf, vat_e, -1);
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(vat_view), vat_buf);
 }
