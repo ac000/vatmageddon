@@ -20,7 +20,7 @@
 #include <gtk/gtk.h>
 
 /* Update for application version. */
-#define VERSION		"007"
+#define VERSION		"007.90"
 
 #define DEF_VAT_RATE	20.0	/* Set the default VAT rate */
 #define DEF_DP		2	/* Set the default number of decimal places */
@@ -77,6 +77,67 @@ static void cb_about(void)
 			G_CALLBACK(gtk_widget_destroy), NULL);
 
 	gtk_widget_show(about);
+}
+
+static void cb_help_close(GtkWidget *widget, GtkWidget *window)
+{
+	gtk_widget_destroy(window);
+}
+
+static void cb_help(void)
+{
+	GtkWidget *window;
+	GtkWidget *box;
+	GtkWidget *view;
+	GtkWidget *button;
+	GtkTextBuffer *buf;
+
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	g_signal_connect(G_OBJECT(window), "destroy",
+			G_CALLBACK(cb_help_close), window);
+	gtk_window_set_title(GTK_WINDOW(window), "vatmageddon / help");
+	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+	gtk_container_set_border_width(GTK_CONTAINER(window), 6);
+
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	gtk_widget_show(box);
+	gtk_container_add(GTK_CONTAINER(window), box);
+
+	view = gtk_text_view_new();
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(view), FALSE);
+	gtk_widget_show(view);
+	gtk_container_add(GTK_CONTAINER(box), view);
+
+	button = gtk_button_new_with_label("Close");
+	g_signal_connect(G_OBJECT(button), "clicked",
+			G_CALLBACK(cb_help_close), window);
+	gtk_widget_show(button);
+	gtk_container_add(GTK_CONTAINER(box), button);
+
+	buf = gtk_text_buffer_new(NULL);
+	gtk_text_buffer_insert_at_cursor(buf, "vatmageddon\n\n", -1);
+	gtk_text_buffer_insert_at_cursor(buf, "This is a simple program to "
+			"calculate the VAT amount and Net or Gross amount, \n"
+			"given either an initial Net or Gross amount.\n\n",
+			-1);
+	gtk_text_buffer_insert_at_cursor(buf, "Simply enter a Net or Gross "
+			"amount and press <enter>. You will then get the \n"
+			"VAT amount and the Net/Gross amount.\n\n", -1);
+	gtk_text_buffer_insert_at_cursor(buf, "You can set the VAT rate and "
+			"the number of decimal places (0..6) you want. You\n"
+			"can also set the rounding function to use. See "
+			"vatmageddon(1) for details. It\ndefaults to the "
+			"glibc round(3) function.\n\n", -1);
+	gtk_text_buffer_insert_at_cursor(buf, "The Reset button clears all "
+			"entries _and_ resets the VAT rate, decimal places "
+			"and\nthe rounding function to their default values."
+			"\n\n", -1);
+	gtk_text_buffer_insert_at_cursor(buf, "The Clear button _only_ clears "
+			"the Gross, Net and VAT values.\n", -1);
+	gtk_text_view_set_buffer(GTK_TEXT_VIEW(view), buf);
+
+	gtk_widget_show(window);
 }
 
 static void cb_reset(GtkWidget *widget, gpointer data)
@@ -217,8 +278,9 @@ int main(int argc, char *argv[])
 	
 	GtkWidget *reset_button;
 	GtkWidget *clear_button;
-	GtkWidget *quit_button;
+	GtkWidget *help_button;
 	GtkWidget *about_button;
+	GtkWidget *quit_button;
 
 	GdkRGBA rgba;
 
@@ -362,6 +424,13 @@ int main(int argc, char *argv[])
 			G_CALLBACK(cb_reset), "clear");
 	gtk_widget_show(clear_button);
 	gtk_container_add(GTK_CONTAINER(ccq_hbox), clear_button);
+
+	help_button = gtk_button_new_with_label("Help");
+	g_object_set(help_button, "expand", TRUE, NULL);
+	g_signal_connect(G_OBJECT(help_button), "clicked",
+			G_CALLBACK(cb_help), NULL);
+	gtk_widget_show(help_button);
+	gtk_container_add(GTK_CONTAINER(ccq_hbox), help_button);
 
 	about_button = gtk_button_new_with_label("About");
 	g_object_set(about_button, "expand", TRUE, NULL);
