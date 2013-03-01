@@ -134,7 +134,14 @@ static void cb_help(void)
 			"and\nthe rounding function to their default values."
 			"\n\n", -1);
 	gtk_text_buffer_insert_at_cursor(buf, "The Clear button _only_ clears "
-			"the Gross, Net and VAT values.\n", -1);
+			"the Gross, Net and VAT values.\n\n", -1);
+	gtk_text_buffer_insert_at_cursor(buf, "When using the VAT rate entry, "
+			"you can use the -/+ buttons or just type the\n"
+			"required value. When using the -/+ buttons, a "
+			"left-click will adjust the value\nin 0.1 "
+			"increments, a middle-click will adjust the value in "
+			"1.0 increments. A\nright-click will set it to its "
+			"minimum/maximum value.\n", -1);
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(view), buf);
 
 	gtk_widget_show(window);
@@ -360,7 +367,9 @@ int main(int argc, char *argv[])
 	gtk_widget_show(vat_rate_label);
 	gtk_container_add(GTK_CONTAINER(vr_hbox), vat_rate_label);
 	
-	vat_rate_entry = gtk_spin_button_new_with_range(0.0, 100.00, 0.1);
+	vat_rate_entry = gtk_spin_button_new_with_range(0.0, 100.00, 0.01);
+	gtk_spin_button_set_increments(GTK_SPIN_BUTTON(vat_rate_entry),
+			0.1, 1.0);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(vat_rate_entry),
 			DEF_VAT_RATE);
 	gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(vat_rate_entry), TRUE);
