@@ -95,8 +95,8 @@ static void cb_help(void)
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	g_signal_connect(G_OBJECT(window), "destroy",
 			G_CALLBACK(cb_help_close), window);
+	gtk_window_set_default_size(GTK_WINDOW(window), 550, 515);
 	gtk_window_set_title(GTK_WINDOW(window), "vatmageddon / help");
-	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 6);
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -106,6 +106,8 @@ static void cb_help(void)
 	view = gtk_text_view_new();
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(view), FALSE);
+	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(view), GTK_WRAP_WORD);
+	g_object_set(view, "expand", TRUE, NULL);
 	gtk_widget_show(view);
 	gtk_container_add(GTK_CONTAINER(box), view);
 
@@ -118,29 +120,29 @@ static void cb_help(void)
 	buf = gtk_text_buffer_new(NULL);
 	gtk_text_buffer_insert_at_cursor(buf, "vatmageddon\n\n", -1);
 	gtk_text_buffer_insert_at_cursor(buf, "This is a simple program to "
-			"calculate the VAT amount and Net or Gross amount, \n"
+			"calculate the VAT amount and Net or Gross amount, "
 			"given either an initial Net or Gross amount.\n\n",
 			-1);
 	gtk_text_buffer_insert_at_cursor(buf, "Simply enter a Net or Gross "
-			"amount and press <enter>. You will then get the \n"
+			"amount and press <enter>. You will then get the "
 			"VAT amount and the Net/Gross amount.\n\n", -1);
 	gtk_text_buffer_insert_at_cursor(buf, "You can set the VAT rate and "
-			"the number of decimal places (0..6) you want. You\n"
+			"the number of decimal places (0..6) you want. You "
 			"can also set the rounding function to use. See "
-			"vatmageddon(1) for details. It\ndefaults to the "
+			"vatmageddon(1) for details. It defaults to the "
 			"glibc round(3) function.\n\n", -1);
 	gtk_text_buffer_insert_at_cursor(buf, "The Reset button clears all "
 			"entries _and_ resets the VAT rate, decimal places "
-			"and\nthe rounding function to their default values."
+			"and the rounding function to their default values."
 			"\n\n", -1);
 	gtk_text_buffer_insert_at_cursor(buf, "The Clear button _only_ clears "
 			"the Gross, Net and VAT values.\n\n", -1);
 	gtk_text_buffer_insert_at_cursor(buf, "When using the VAT rate entry, "
-			"you can use the -/+ buttons or just type the\n"
+			"you can use the -/+ buttons or just type the "
 			"required value. When using the -/+ buttons, a "
-			"left-click will adjust the value\nin 0.1 "
+			"left-click will adjust the value in 0.1 "
 			"increments, a middle-click will adjust the value in "
-			"1.0 increments. A\nright-click will set it to its "
+			"1.0 increments. A right-click will set it to its "
 			"minimum/maximum value.\n", -1);
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(view), buf);
 
