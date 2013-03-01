@@ -2,7 +2,7 @@
 Name=vatmageddon
 Comment=Calculate VAT, Gross & Net values
 Exec=vatmageddon
-Icon=accessories-calculator
+Icon=vatmageddon
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;Utility;Calculator;

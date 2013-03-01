@@ -28,6 +28,7 @@ rm -rf $RPM_BUILD_ROOT
 install -Dp -m755 vatmageddon $RPM_BUILD_ROOT/%{_bindir}/vatmageddon
 install -Dp -m644 vatmageddon.1.gz $RPM_BUILD_ROOT/%{_mandir}/man1/vatmageddon.1.gz
 install -Dp -m0644 vatmageddon.desktop $RPM_BUILD_ROOT/%{_datarootdir}/applications/vatmageddon.desktop
+install -Dp -m0644 vatmageddon.png $RPM_BUILD_ROOT/%{_datadir}/pixmaps/vatmageddon.png
 
 
 %clean
@@ -39,6 +40,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/vatmageddon
 %{_mandir}/man1/vatmageddon.1.gz
 %{_datarootdir}/applications/vatmageddon.desktop
+%{_datadir}/pixmaps/vatmageddon.png
 
 
 %changelog

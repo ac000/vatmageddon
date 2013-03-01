@@ -58,6 +58,10 @@ static void cb_about(void)
 	const gchar *authors[2] = {
 		"Andrew Clayton <andrew@digital-domain.net>",
 		(const char *)NULL };
+	const gchar *artists[3] = {
+		"OpenClipart http://openclipart.org/",
+		"Graham Thomson <graham.thomson@gmail.com>",
+		(const char *)NULL };
 
 	about = gtk_about_dialog_new();
 
@@ -69,8 +73,12 @@ static void cb_about(void)
 			"Copyright (C) 2010-2013 Andrew Clayton");
 	gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(about),
 			(const gchar **)&authors);
+	gtk_about_dialog_set_artists(GTK_ABOUT_DIALOG(about),
+			(const gchar **)&artists);
 	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(about),
 			"http://github.com/ac000/vatmageddon");
+	gtk_about_dialog_set_logo_icon_name(GTK_ABOUT_DIALOG(about),
+			"vatmageddon");
 
 	/* Connect the close_button to destroy the widget */
 	g_signal_connect(G_OBJECT(about), "response",
