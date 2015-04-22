@@ -3,7 +3,7 @@
  *
  * A Gross/Net/VAT calculator
  *
- * Copyright (C) 2010-2013, Andrew Clayton <andrew@digital-domain.net>
+ * Copyright (C) 2010-2013, 2015    Andrew Clayton <andrew@digital-domain.net>
  *
  * Released under the General Public License (GPL) version 2.
  * See COPYING
@@ -55,10 +55,10 @@ static void cb_quit(void)
 static void cb_about(void)
 {
 	GtkWidget *about;
-	const gchar *authors[2] = {
+	const gchar *authors[] = {
 		"Andrew Clayton <andrew@digital-domain.net>",
 		(const char *)NULL };
-	const gchar *artists[3] = {
+	const gchar *artists[] = {
 		"OpenClipart http://openclipart.org/",
 		"Graham Thomson <graham.thomson@gmail.com>",
 		(const char *)NULL };
