@@ -3,7 +3,8 @@
  *
  * A Gross/Net/VAT calculator
  *
- * Copyright (C) 2010-2013, 2015    Andrew Clayton <andrew@digital-domain.net>
+ * Copyright (C) 2010 - 2013, 2015 - 2016
+ * 		 Andrew Clayton <andrew@digital-domain.net>
  *
  * Released under the General Public License (GPL) version 2.
  * See COPYING
@@ -204,6 +205,7 @@ static double do_rounding(double to_round)
 	else if (strstr(rounder, "round_half_even -"))
 		ret = lr_round_half_even(to_round, rf);
 
+	g_free(rounder);
 	/* Create the format string for displaying the gross and net values */
 	snprintf(val_fmt, sizeof(val_fmt), "%%.%df",
 			gtk_spin_button_get_value_as_int(
