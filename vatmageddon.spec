@@ -5,7 +5,7 @@ Summary:	GUI for calculating VAT, Gross & Net values
 
 Group:		Applications/System
 License:	GPLv2
-URL:		http://github.com/ac000/vatmageddon
+URL:		https://github.com/ac000/vatmageddon
 Source0:	vatmageddon-%{version}.tar
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
